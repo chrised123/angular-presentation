@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BroadcastService, MsalService } from '@azure/msal-angular';
-import { Logger, CryptoUtils } from 'msal';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 
@@ -14,28 +12,11 @@ export class AppComponent implements OnInit {
   showHeader = true;
   showFooter = true;
   constructor(
-    private broadcastService: BroadcastService,
-    private authService: MsalService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
-
-    this.checkoutAccount();
-
-    this.broadcastService.subscribe('msal:loginSuccess', () => {
-      this.checkoutAccount();
-    });
-
-    this.authService.handleRedirectCallback((authError, response) => {
-      if (authError) {
-        console.error('Redirect Error: ', authError.errorMessage);
-        return;
-      }
-
-      console.log('Redirect Success: ', response.accessToken);
-    });
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -43,23 +24,5 @@ export class AppComponent implements OnInit {
         this.showFooter = this.activatedRoute.firstChild.snapshot.data.showFooter !== false;
       }
     });
-  }
-
-  checkoutAccount() {
-    this.loggedIn = !!this.authService.getAccount();
-  }
-
-  login() {
-    const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
-
-    if (isIE) {
-      this.authService.loginRedirect();
-    } else {
-      this.authService.loginPopup();
-    }
-  }
-
-  logout() {
-    this.authService.logout();
   }
 }

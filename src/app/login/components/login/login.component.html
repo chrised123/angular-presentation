@@ -1,1 +1,16 @@
-<p>login works!</p>
+<div class="login-card card">
+  <h3>Login</h3>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" formControlName="username" class="form-control">
+      <span class="text-danger text-small" *ngIf="loginForm.controls['username'].errors && (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)"><app-validation [errors]="loginForm.controls['username'].errors"></app-validation></span>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" formControlName="password" class="form-control">
+      <span class="text-danger text-small" *ngIf="loginForm.controls['password'].errors && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)"><app-validation [errors]="loginForm.controls['password'].errors"></app-validation></span>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Submit</button>
+  </form>
+</div>

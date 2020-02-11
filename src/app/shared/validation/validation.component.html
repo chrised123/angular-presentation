@@ -1,0 +1,3 @@
+<ng-container *ngIf="errors && errors['required']">This field is required</ng-container>
+<ng-container *ngIf="errors && errors['email']">Please enter a valid email</ng-container>
+<ng-container *ngIf="errors && errors['minlength']">Length should be more than specified</ng-container>
