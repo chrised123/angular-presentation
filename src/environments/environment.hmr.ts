@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  storage: 'cookie', // cookie, localstorage
   hmr: true
 };
 
