@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit{
 
   login = () => {
     this.loginService.login(this.loginForm).subscribe((data) => {
-      console.log(data);
       this.storageService.loginSet(data);
       this.router.navigateByUrl('app');
     },

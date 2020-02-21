@@ -12,4 +12,5 @@ import { ProfileRoutingModule } from './profile-routing.module';
     ProfileRoutingModule
   ]
 })
+
 export class ProfileModule { }

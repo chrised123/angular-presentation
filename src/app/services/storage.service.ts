@@ -20,6 +20,7 @@ export class StorageService {
   }
 
   logoutRemove = () => {
+    console.log('logout')
     if (environment.storage === 'cookie') {
       this.logoutRemoveCookie();
     } else {
@@ -27,36 +28,44 @@ export class StorageService {
     }
   }
 
-  loginGet = () => {
+  getItem = (key) => {
     if (environment.storage === 'cookie') {
-      return this.cookie.get('token');
+      return this.cookie.get(key);
     } else {
-      return localStorage.getItem('token');
+      return localStorage.getItem(key);
     }
   }
 
   // Local storage implementation
   private loginSetLocal = (jwtObject) => {
     console.log('localstorage');
-    localStorage.setItem('expires', jwtObject.expires);
+    localStorage.setItem('expires', jwtObject.tokenExpiry);
     localStorage.setItem('token', jwtObject.token);
+    localStorage.setItem('refreshToken', jwtObject.refreshToken);
+    localStorage.setItem('refreshTokenExpiry', jwtObject.refreshTokenExpiry);
   }
 
   private logoutRemoveLocal = () => {
     localStorage.removeItem('expires');
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('refreshTokenExpiry');
   }
 
   // Cookie implementation
   private loginSetCookie = (jwtObject) => {
+    console.log(jwtObject);
     console.log('cookie');
     // localStorage.setItem('expires', jwtObject.expires);
     // localStorage.setItem('token', jwtObject.token);
-    this.cookie.set('token', jwtObject.token, new Date(jwtObject.expires), '/', 'localhost', false, 'Strict');
+    this.cookie.set('token', jwtObject.token, new Date(parseInt(jwtObject.tokenExpiry)), '/', 'localhost', false, 'Strict');
+    this.cookie.set('refreshToken', jwtObject.refreshToken, new Date(parseInt(jwtObject.refreshTokenExpiry)), '/', 'localhost', false, 'Strict');
   }
 
   private logoutRemoveCookie = () => {
-    this.cookie.delete('token');
+    console.log('remove');
+    this.cookie.delete('token', '/');
+    this.cookie.delete('refreshToken', '/');
   }
 
 }

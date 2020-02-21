@@ -15,10 +15,10 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(): boolean {
     const jwt = new JwtHelperService();
-    const token = this.storage.loginGet()
+    const token = this.storage.getItem('token');
     if (token != null) {
       const isExpired = jwt.isTokenExpired(token);
-      console.log('authGuard triggered!');
+      console.log(`authGuard for token ${token} triggered! => ${isExpired}`);
       if (!isExpired) {
         return true;
       }

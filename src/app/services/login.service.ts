@@ -22,11 +22,19 @@ export class LoginService {
       {
         username: form.value.username,
         password: form.value.password
+      },
+      {
+        observe: 'response'
       }
       ).pipe(
-           map((data) => {
-             console.log(data);
-             return data;
+           map((response) => {
+            console.log(response.headers);
+            return {
+              token: response.headers.get('Token'),
+              tokenExpiry: response.headers.get('Token-Expiry'),
+              refreshToken: response.headers.get('Refresh-Token'),
+              refreshTokenExpiry: response.headers.get('Refresh-Token-Expiry'),
+            };
            }), catchError( error => {
              return throwError( error );
            })
@@ -34,6 +42,7 @@ export class LoginService {
   }
 
   logout = () => {
+    console.log('test');
     this.storage.logoutRemove();
     this.router.navigate(['login']);
   }
