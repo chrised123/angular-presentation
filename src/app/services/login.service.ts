@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, Observable, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { StorageService } from './storage.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class LoginService {
   login(form: FormGroup): Observable<any> {
     console.log(form);
     return this.http.post(
-      `http://localhost:4000/users/authenticate`,
+      `${environment.apiBaseUrl}/users/authenticate`,
       {
         username: form.value.username,
         password: form.value.password
@@ -49,7 +50,7 @@ export class LoginService {
 
   refresh() {
     return this.http.post<any>(
-      'http://localhost:4000/users/refresh',
+      `${environment.apiBaseUrl}/users/refresh`,
       null,
       {
         observe: 'response'

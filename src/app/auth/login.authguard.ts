@@ -25,7 +25,7 @@ export class AuthGuardService implements CanActivate {
       if (!isExpired) {
         // check if expiry is less than 15 seconds.
         const tokenExpiry = jwt.getTokenExpirationDate(token);
-        if (tokenExpiry.getTime() - Date.now() < 15000) {
+        if (tokenExpiry.getTime() - Date.now() < environment.thresholdTime) {
           return this.login.refresh().pipe(
             map(data => {
             this.storage.loginSet(data);
