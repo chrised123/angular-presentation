@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -45,5 +45,26 @@ export class LoginService {
     console.log('test');
     this.storage.logoutRemove();
     this.router.navigate(['login']);
+  }
+
+  refresh() {
+    return this.http.post<any>(
+      'http://localhost:4000/users/refresh',
+      null,
+      {
+        observe: 'response'
+      }).
+    pipe(
+      map((response) => {
+        return {
+          token: response.headers.get('Token'),
+          tokenExpiry: response.headers.get('Token-Expiry'),
+          refreshToken: response.headers.get('Refresh-Token'),
+          refreshTokenExpiry: response.headers.get('Refresh-Token-Expiry'),
+        };
+      }), catchError( error => {
+        return throwError( error );
+      })
+    );
   }
 }
